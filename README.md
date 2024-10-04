@@ -4,6 +4,9 @@ Used this to convert my json file from ghost cms to markdown to use in obsidian.
 
 ** One big assuption I'll be making here is that you have a folder called /images already in obsidian. Any local photos will look for items there **
 
+## How to run
+`python3 app.py <input_file> <output_folder>
+
 There will be 2 file types created in the output folder.
 
 ### post files
@@ -19,6 +22,7 @@ created: <YYYY-MM-DD>
 
 <text_from_blog_post>
 ```
+
 ### tag file
 ```
 - tag1

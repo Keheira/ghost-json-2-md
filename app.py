@@ -5,17 +5,21 @@ import os
 import sys
 
 def main():
-   outpath = "output"
    
    if len(sys.argv) < 2:
       print("Error: Please provide a file path.")
       return
+   
+   if len(sys.argv) < 3:
+      print("Error: Please provide an output folder.")
+      return
 
    filePath = sys.argv[1]
+   outPath = sys.argv[2]
 
-   ProcessJson(filePath, outpath)
+   ProcessJson(filePath, outPath)
 
-   print(f"Finished, check ./{outpath}/ folder")
+   print(f"Finished, check {outPath} folder")
 
 def ProcessJson(inputFile, outputPath):
    # open json file
