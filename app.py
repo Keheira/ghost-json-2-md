@@ -64,7 +64,7 @@ def ProcessJson(inputFile, outputPath):
       else:
          newfile.write(f"tags:")
          for tag in tags:
-            newfile.write(f"\n\t{tag}")
+            newfile.write(f"\n{tag}")
       newfile.write(f"publish: {isPublished}\n")
       newfile.write(f"updated: {updateDate}\n")
       if isPublished:
