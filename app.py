@@ -34,47 +34,58 @@ def ProcessJson(inputFile, outputPath):
    for entry in data["db"][0]["data"]["posts"]:
       title = entry['title']
 
-      featureImageTemp = entry['feature_image']
-      if featureImageTemp is not None and featureImageTemp[0] == "/":
-         featureImage = featureImageTemp[8:]
-      else:
-         featureImage = featureImageTemp
+      featureImage = entry['feature_image']
       
       htmlText = entry['html']
       creationDate = entry['published_at'][:-14]
       updateDate = entry['updated_at'][:-14]
       publishDate = entry['published_at'][:-14]
+      slug = entry['slug']
       if entry['status'] == 'published':
          isPublished = True
       else:
          isPublished = False
+
+      tags = tagsForPost(
+         data["db"][0]["data"]['posts_tags'],
+         entry['id'],
+         data["db"][0]["data"]["tags"]
+      )
       
       # pyndoc for html to md
-      mdText = pypandoc.convert_text(htmlText, 'md', 'html')
+      mdText = pypandoc.convert_text(source=htmlText, to='md', format='html')
       
       filename = title + ".md"
       newfile = io.open(folderpath  +  "/" + filename , mode="a", encoding="utf-8")
       
       newfile.write("---\n")
-      newfile.write(f"tags: \n - fromGhost\n")
+      if not tags:
+         newfile.write(f"tags: \n")
+      else:
+         newfile.write(f"tags:")
+         for tag in tags:
+            newfile.write(f"\n\t{tag}")
       newfile.write(f"publish: {isPublished}\n")
       newfile.write(f"updated: {updateDate}\n")
       if isPublished:
          newfile.write(f"created: {publishDate}\n")
       else:
          newfile.write(f"created: {creationDate}\n")
+      newfile.write(f"permalink: {slug}\n")
       newfile.write("---\n")
-      if featureImageTemp is not None:
+      if featureImage is not None:
          newfile.write(f"![featured image]({featureImage})\n\n")
       newfile.write(mdText)
       newfile.close()
 
-   tagFile = io.open(folderpath  +  "/tags.txt" , mode="a", encoding="utf-8")
-   for tag in data["db"][0]["data"]["tags"]:
-      tagFile.write(f"- {tag['name']}\n")
-      
-   tagFile.close()
-
+def tagsForPost(postTags, currentPostId, tags):
+   post_tag = []
+   for post in postTags:
+      if post['post_id'] == currentPostId:
+         for tag in tags:
+            if tag['id'] == post['tag_id']:
+               post_tag.append(f"- {tag['name']}\n")
+   return post_tag
 
 if __name__ == "__main__":
    main()
