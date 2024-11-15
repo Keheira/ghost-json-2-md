@@ -41,6 +41,7 @@ def ProcessJson(inputFile, outputPath):
       updateDate = entry['updated_at'][:-14]
       publishDate = entry['published_at'][:-14]
       slug = entry['slug']
+      description = entry['custom_excerpt']
       if entry['status'] == 'published':
          isPublished = True
       else:
@@ -72,6 +73,7 @@ def ProcessJson(inputFile, outputPath):
       else:
          newfile.write(f"created: {creationDate}\n")
       newfile.write(f"permalink: {slug}\n")
+      newfile.write(f"description: {description}\n")
       newfile.write("---\n")
       if featureImage is not None:
          newfile.write(f"![featured image]({featureImage})\n\n")
